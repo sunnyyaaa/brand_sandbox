@@ -1,0 +1,56 @@
+parameters:
+###########################################
+# general parameters
+###########################################
+- name:           log
+  type:           string
+  default:        INFO
+  description:    Logging level.
+
+- name:           sync_key
+  type:           string
+  default:        sync
+  description:    The key belonging to each entry for tracking data flow through graph execution.
+
+- name:           time_key
+  type:           string
+  default:        ts
+  description:    The key belonging to each entry for storing monotonic clock.
+
+###########################################
+# stream parameters
+###########################################
+- name:           input_stream
+  type:           string
+  default:        brain_state
+  description:    Name of the Redis stream to read from (written by brain_sim).
+
+- name:           output_stream
+  type:           string
+  default:        decoded_state
+  description:    Name of the Redis stream to write decoded labels to.
+
+- name:           print_states
+  type:           bool
+  default:        true
+  description:    If true, log each decoded state to stdout.
+
+- name:           max_len
+  type:           int
+  default:        60000
+  description:    MAXLEN cap on xadd (approximate).
+
+RedisStreams:
+  Inputs:
+    brain_state:
+      samples:
+        chan_per_stream:    3
+        samp_per_stream:    1
+        sample_type:        float32
+  Outputs:
+    decoded_state:
+      enable_nwb:           False
+      samples:
+        chan_per_stream:    1
+        samp_per_stream:    1
+        sample_type:        string

@@ -1,0 +1,51 @@
+parameters:
+###########################################
+# general parameters
+###########################################
+- name:           log
+  type:           string
+  default:        INFO
+  description:    Logging level.
+
+- name:           sync_key
+  type:           string
+  default:        sync
+  description:    The key belonging to each entry for tracking data flow through graph execution.
+
+- name:           time_key
+  type:           string
+  default:        ts
+  description:    The key belonging to each entry for storing monotonic clock.
+
+###########################################
+# output / behavior
+###########################################
+- name:           output_stream
+  type:           string
+  default:        brain_state
+  description:    Name of the Redis stream this node writes to.
+
+- name:           sample_rate
+  type:           int
+  default:        100
+  description:    Sample rate in Hz.
+
+- name:           random_seed
+  type:           int
+  default:        42
+  description:    Seed for numpy RNG. Set to null/None to use a non-deterministic seed.
+
+- name:           max_len
+  type:           int
+  default:        60000
+  description:    MAXLEN cap on xadd (approximate). 60000 = ~10 min at 100 Hz.
+
+RedisStreams:
+  Inputs: {}
+  Outputs:
+    brain_state:
+      enable_nwb:           False
+      samples:
+        chan_per_stream:    3
+        samp_per_stream:    1
+        sample_type:        float32
